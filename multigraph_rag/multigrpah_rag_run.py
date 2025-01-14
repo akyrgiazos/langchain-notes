@@ -396,4 +396,32 @@ if __name__ == "__main__":
         
         for i, result in enumerate(results, 1):
             print(f"\n{i}. Document: {result['document_id']}")
-            print(f"Citation Score: {result['citation_score
+            print(f"Citation Score: {result['citation_score']:.3f}")
+            print(f"Concept Score: {result['concept_score']:.3f}")
+            
+            print("\nSummary:")
+            if result['summary']:
+                print(textwrap.fill(result['summary'], width=80))
+            
+            print("\nKey Points:")
+            for point in result['key_points']:
+                print(f"- {point}")
+            
+            print("\nRelevant Sections:")
+            for section in result['relevant_sections']:
+                print(f"\n  - {section['title']} (Page {section['page']})")
+                print(f"    Relevance Score: {section['score']:.3f}")
+                if section['analysis']:
+                    print("    Analysis:")
+                    print(textwrap.fill(section['analysis'], width=80, 
+                                      initial_indent="    ", 
+                                      subsequent_indent="    "))
+                print("\n    Content Preview:")
+                preview = section['content'][:300] + "..." if len(section['content']) > 300 else section['content']
+                print(textwrap.fill(preview, width=80, 
+                                  initial_indent="    ", 
+                                  subsequent_indent="    "))
+            print("\n" + "-" * 50)
+    
+    # Run the async main function
+    asyncio.run(main())
